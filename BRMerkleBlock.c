@@ -32,8 +32,7 @@
 #include <assert.h>
 
 #define MAX_PROOF_OF_WORK 0x1e0fffff    // highest value for difficulty target (higher values are less difficult)
-#define TARGET_TIMESPAN (0.10*24*60*60) // the targeted timespan between difficulty target adjustments
-#define BLOCK_VERSION_ALGO (7 << 9)
+#define TARGET_TIMESPAN (2*60) // the targeted timespan between difficulty target adjustments
 
 inline static int _ceil_log2(int x)
 {
@@ -137,28 +136,6 @@ BRMerkleBlock *BRMerkleBlockParse(const uint8_t *buf, size_t bufLen)
         }
         
         BRSHA256_2(&block->blockHash, buf, 80);
-
-        switch (block->version & BLOCK_VERSION_ALGO) {
-            case 512:
-                BRSHA256_2(&block->powHash, buf, 80);
-                break;
-
-            case 1536:
-                BRSkein(&block->powHash, buf);
-                break;
-
-            case 2048:
-                BRQubit(&block->powHash, buf);
-                break;
-
-            case 1024:
-                BRGroestl(&block->powHash, buf);
-                break;
-
-            default:
-                BRScrypt(&block->powHash, sizeof(block->powHash), buf, 80, buf, 80, 1024, 1, 1);
-
-        }
     }
     
     return block;
@@ -295,8 +272,8 @@ int BRMerkleBlockIsValid(const BRMerkleBlock *block, uint32_t currentTime)
     
     // target is in "compact" format, where the most significant byte is the size of resulting value in bytes, the next
     // bit is the sign, and the remaining 23bits is the value after having been right shifted by (size - 3)*8 bits
-    static const uint32_t maxsize = MAX_PROOF_OF_WORK >> 24, maxtarget = MAX_PROOF_OF_WORK & 0x00ffffff;
-    const uint32_t size = block->target >> 24, target = block->target & 0x00ffffff;
+    static const uint32_t maxsize = MAX_PROOF_OF_WORK >> 20, maxtarget = MAX_PROOF_OF_WORK & 0x00ffffff;
+    const uint32_t size = block->target >> 20, target = block->target & 0x00ffffff;
     size_t hashIdx = 0, flagIdx = 0;
     UInt256 merkleRoot = _BRMerkleBlockRootR(block, &hashIdx, &flagIdx, 0), t = UINT256_ZERO;
     int r = 1;
@@ -356,7 +333,13 @@ int BRMerkleBlockContainsTxHash(const BRMerkleBlock *block, UInt256 txHash)
 // transitionTime is the timestamp of the block at the previous difficulty transition
 // transitionTime may be 0 if block->height is not a multiple of BLOCK_DIFFICULTY_INTERVAL
 //
-// The difficulty target algorithm is called Multishield.
+// The difficulty target algorithm works as follows:
+// The target must be the same as in the previous block unless the block's height is a multiple of 2016. Every 2016
+// blocks there is a difficulty transition where a new difficulty is calculated. The new target is the previous target
+// multiplied by the time between the last transition block's timestamp and this one (in seconds), divided by the
+// targeted time between transitions (14*24*60*60 seconds). If the new difficulty is more than 4x or less than 1/4 of
+// the previous difficulty, the change is limited to either 4x or 1/4. There is also a minimum difficulty value
+// intuitively named MAX_PROOF_OF_WORK... since larger values are less difficult.
 int BRMerkleBlockVerifyDifficulty(const BRMerkleBlock *block, const BRMerkleBlock *previous, uint32_t transitionTime)
 {
     int r = 1;
