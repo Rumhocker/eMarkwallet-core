@@ -46,8 +46,8 @@ extern "C" {
 
 #define TXIN_SEQUENCE        UINT32_MAX  // sequence number for a finalized tx input
 
-#define SATOSHIS             100000000LL
-#define MAX_MONEY            (21000000LL*SATOSHIS) //TODO: This should be 21000000000?
+#define SATOSHIS             1000000LL
+#define MAX_MONEY            (210000000LL*SATOSHIS) //TODO: This should be 21000000000?
 
 #define BR_RAND_MAX          ((RAND_MAX > 0x7fffffff) ? 0x7fffffff : RAND_MAX)
 
@@ -86,6 +86,7 @@ void BRTxOutputSetScript(BRTxOutput *output, const uint8_t *script, size_t scrip
 typedef struct {
     UInt256 txHash;
     uint32_t version;
+    uint32_t nTime;
     BRTxInput *inputs;
     size_t inCount;
     BRTxOutput *outputs;
@@ -93,6 +94,8 @@ typedef struct {
     uint32_t lockTime;
     uint32_t blockHeight;
     uint32_t timestamp; // time interval since unix epoch
+    uint8_t  txCommentSize;
+    unsigned char* txComment;
 } BRTransaction;
 
 // returns a newly allocated empty transaction that must be freed by calling BRTransactionFree()
