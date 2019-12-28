@@ -999,15 +999,3 @@ void BRScrypt(void *dk, size_t dkLen, const void *pw, size_t pwLen, const void *
     mem_clean(v, 128*r*n);
     free(v);
 }
-
-void BRSkein(const char* input, char* output) {
-    skein_hash(input, output);
-}
-
-void BRGroestl(const char* input, char* output){
-    groestl_hash(input, output);
-}
-
-void BRQubit(const char* input, char* output) {
-    qubit_hash(input, output);
-}
