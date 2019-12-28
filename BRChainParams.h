@@ -46,12 +46,11 @@ typedef struct {
 } BRChainParams;
 
 static const char *BRMainNetDNSSeeds[] = {
-	"seed.deutsche-emark.de.", 
-    "185.194.142.165",
-    "88.98.228.14",
-    "54.36.143.147",
-    "195.211.155.193",
-    "44.144.145.146", NULL
+    "5.146.4.167",
+    "85.235.67.103",
+    "83.171.238.198",
+    "61.118.89.160",
+    "5.189.173.231", NULL
 };
 
 static const char *BRTestNetDNSSeeds[] = {
@@ -90,7 +89,8 @@ static const BRCheckPoint BRMainNetCheckpoints[] = {
     { 2010000, uint256("000000000000003ae521dea80daa2143f7c543f4806ca9ca7e268b6e50ddabb6"), 1540899800, 0x1a00e1e1 },
     { 2020000, uint256("0b4112feae4c8eda3bc9182d85c0718e09bf4f146d4c7a8a2d823f8c4454e93f"), 1541507136, 0x1b3ae2d9 },
     { 2030000, uint256("0000000000000039821e57375ceeba3bf8e793f0d82a5d22c6a0cf7a3107308d"), 1542109646, 0x193c0234 },
-    { 2040000, uint256("0000000000000030eacc728ee1d6e1728d62d86cc038134b91df3647fdf072c8"), 1542715659, 0x194c598e }	
+    { 2300000, uint256("0000000000000068fc127ff7aa739603427a61dc4dee92ac1614b1d3efd93751"), 1558501912, 0x1a02bccc },
+    { 2600000, uint256("00000000000000d156ae7407b539db0cbe0419223df21979c9f3a6887bbd3e49"), 1576701354, 0x1a03d3cc }	
 };
 
 static const BRCheckPoint BRTestNetCheckpoints[] = {
