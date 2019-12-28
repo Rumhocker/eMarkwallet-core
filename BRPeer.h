@@ -42,7 +42,7 @@
 #define _peer_log(...) NSLog(__VA_ARGS__)
 #elif defined(__ANDROID__)
 #include <android/log.h>
-#define _peer_log(...) __android_log_print(ANDROID_LOG_INFO, "bread", __VA_ARGS__)
+#define _peer_log(...) __android_log_print(ANDROID_LOG_INFO, "eMark", __VA_ARGS__)
 #else
 #include <stdio.h>
     #ifdef DEBUG
@@ -57,7 +57,7 @@
     #define debug_log(...) NSLog(__VA_ARGS__)
 #elif defined(__ANDROID__)
     #include <android/log.h>
-    #define debug_log(...) __android_log_print(ANDROID_LOG_DEBUG, "digiwallet", __VA_ARGS__)
+    #define debug_log(...) __android_log_print(ANDROID_LOG_DEBUG, "emarkwallet", __VA_ARGS__)
 #else
     #include <stdio.h>
     #ifdef DEBUG
@@ -75,7 +75,7 @@ extern "C" {
 #define SERVICES_NODE_BLOOM   0x04 // BIP111: https://github.com/bitcoin/bips/blob/master/bip-0111.mediawiki
 #define SERVICES_NODE_BCASH   0x20 // https://github.com/Bitcoin-UAHF/spec/blob/master/uahf-technical-spec.md
     
-#define BR_VERSION "1.0.0"
+#define BR_VERSION "2.0.3"
 #define USER_AGENT "/eMark Android:" BR_VERSION "/"
 
 // explanation of message types at: https://en.bitcoin.it/wiki/Protocol_specification
